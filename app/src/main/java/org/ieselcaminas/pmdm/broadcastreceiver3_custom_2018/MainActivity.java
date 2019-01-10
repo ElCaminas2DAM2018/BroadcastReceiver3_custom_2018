@@ -3,6 +3,7 @@ package org.ieselcaminas.pmdm.broadcastreceiver3_custom_2018;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,11 +13,14 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     private BroadcastReceiver broadcastReceiver;
+    private LocalBroadcastManager localBroadcastManager;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) { 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        localBroadcastManager = LocalBroadcastManager.getInstance(this);
 
         Button buttonReceive = (Button) findViewById(R.id.buttonEnable);
         buttonReceive.setOnClickListener(new View.OnClickListener() {
@@ -24,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 broadcastReceiver = new MyReceiver();
                 IntentFilter filter = new IntentFilter("net.victoralonso.CUSTOM_INTENT");
-                registerReceiver(broadcastReceiver, filter);
+                localBroadcastManager.registerReceiver(broadcastReceiver, filter);
                 Toast.makeText(getApplicationContext(), "Broadcast Receiver enabled.", Toast.LENGTH_LONG).show();
             }
         });
@@ -34,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (broadcastReceiver != null) {
-                    unregisterReceiver(broadcastReceiver);
+                    localBroadcastManager.unregisterReceiver(broadcastReceiver);
                     broadcastReceiver = null;
                     Toast.makeText(getApplicationContext(), "Broadcast Receiver disabled.", Toast.LENGTH_LONG).show();
                 }
@@ -48,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                 // broadcast a custom intent.
                 Intent intent = new Intent();
                 intent.setAction("net.victoralonso.CUSTOM_INTENT");
-                sendBroadcast(intent);
+                localBroadcastManager.sendBroadcast(intent);
             }
         });
     }
