@@ -22,10 +22,12 @@ public class MainActivity extends AppCompatActivity {
         buttonReceive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                broadcastReceiver = new MyReceiver();
-                IntentFilter filter = new IntentFilter("net.victoralonso.CUSTOM_INTENT");
-                registerReceiver(broadcastReceiver, filter);
-                Toast.makeText(getApplicationContext(), "Broadcast Receiver enabled.", Toast.LENGTH_LONG).show();
+                if (broadcastReceiver == null) {
+                    broadcastReceiver = new MyReceiver();
+                    IntentFilter filter = new IntentFilter("net.victoralonso.CUSTOM_INTENT");
+                    registerReceiver(broadcastReceiver, filter);
+                    Toast.makeText(getApplicationContext(), "Broadcast Receiver enabled.", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
